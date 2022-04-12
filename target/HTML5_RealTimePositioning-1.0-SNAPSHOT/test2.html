@@ -1,0 +1,89 @@
+<!DOCTYPE html>
+
+<!--
+Project name(项目名称)：HTML5_RealTimePositioning
+  File name(文件名): test2
+  Authors(作者）: mao
+  Author QQ：1296193245
+  GitHub：https://github.com/maomao124/
+  Date(创建日期)： 2022/4/12
+  Time(创建时间)： 17:53
+  Description(描述)： 无
+-->
+
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Title</title>
+</head>
+<body>
+
+
+<button onclick="start()">
+    开始获取位置
+</button>
+<button onclick="stop()">
+    停止获取位置
+</button>
+<div id="detail">
+    坐标：
+    <br>
+</div>
+<script>
+    var detail = document.getElementById("detail");
+    var watchID;
+
+    if (!navigator.geolocation)
+    {
+        detail.innerHTML = "浏览器不支持定位";
+    }
+
+
+    function start()
+    {
+        watchID = navigator.geolocation.watchPosition(showPosition, showError, options);
+    }
+
+    function stop()
+    {
+        //Geolocation.clearWatch()方法用于取消注册以前使用Geolocation.watchPosition()安装的位置/错误监控处理程序。
+        navigator.geolocation.clearWatch(watchID);
+        detail.innerHTML += "实时更新位置已停止。<br><br>";
+    }
+
+    function showPosition(position)
+    {
+        var now = new Date();
+        detail.innerHTML += "本次更新时间：" + now.toLocaleString() +
+            "<br>您的纬度是：" + position.coords.latitude +
+            "<br>您的经度是：" + position.coords.longitude + "<br><br>";
+    }
+
+    function showError(error)
+    {
+        switch (error.code)
+        {
+            case error.PERMISSION_DENIED:
+                detail.innerHTML = "用户拒绝了地理定位的请求。"
+                break;
+            case error.POSITION_UNAVAILABLE:
+                detail.innerHTML = "位置信息不可用。"
+                break;
+            case error.TIMEOUT:
+                detail.innerHTML = "请求超时。"
+                break;
+            case error.UNKNOWN_ERR:
+                detail.innerHTML = "未知错误发生。"
+                break;
+        }
+    }
+
+    var options =
+        {
+            enableHighAccuracy: true,
+            maximumAge: 2000,
+            timeout: 2000
+        };
+</script>
+</body>
+</html>
